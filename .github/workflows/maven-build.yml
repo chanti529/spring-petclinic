@@ -57,3 +57,6 @@ jobs:
           jf rt bce
           jf rt bag
           jf rt bp '${{ github.workflow }}-${{ github.run_id }}' ${{ github.run_number }}
+      - name: JFrog Build Scan
+        run: |
+          jf bs
