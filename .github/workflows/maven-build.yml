@@ -28,22 +28,16 @@ jobs:
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
         env:
-          # JFrog platform url (for example: https://acme.jfrog.io)
           JF_URL: ${{ vars.JF_URL }}
-          # JFrog Platform access token
           JF_ACCESS_TOKEN: ${{ secrets.JF_ACCESS_TOKEN }}
-          # Basic authentication credentials
-          ## JF_USER: ${{ secrets.JF_USER }}
-          ## JF_PASSWORD: ${{ secrets.JF_PASSWORD }}
-      - name: Run JFrog CLI
+      - name: Configure JFrog CLI for Maven
         run: |
-          # Ping the server
-          jf rt ping
-          # Collect environment variables for the build
+          jf mvnc --repo-resolve-releases=petclinic-libs-release --repo-resolve-snapshots=petclinic-libs-snapshot-local --repo-deploy-releases=petclinic-libs-release-local --repo-deploy-snapshots=petclinic-libs-snapshot-local
+      - name: Build and Deploy with Maven
+        run: |
+          ./mvnw -B deploy -DskipTests --settings=$(jf mvn-config --show-config)
+      - name: Collect and Publish Build Info
+        run: |
           jf rt bce
-          # Collect VCS details from git and add them to the build
           jf rt bag
-          # Publish build info
-          jf rt bp
-      - name: Build with Maven Wrapper
-        run: ./mvnw -B verify
+          jf rt bp ${{ github.workflow }}-${{ github.run_id }} ${{ github.run_number }}
