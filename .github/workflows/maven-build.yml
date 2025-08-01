@@ -32,6 +32,12 @@ jobs:
           JF_URL: ${{ vars.JF_URL }}
           JF_USER: ${{ secrets.JF_USER }}
           JF_PASSWORD: ${{ secrets.JF_PASSWORD }}
+      - name: JFrog CLI Debug and Ping
+        run: |
+          export JFROG_CLI_LOG_LEVEL=DEBUG
+          jf --version
+          jf c show
+          jf rt ping
       - name: Configure JFrog CLI for Maven
         run: |
           jf mvnc --repo-resolve-releases=petclinic-libs-release --repo-resolve-snapshots=petclinic-libs-snapshot-local --repo-deploy-releases=petclinic-libs-release-local --repo-deploy-snapshots=petclinic-libs-snapshot-local
