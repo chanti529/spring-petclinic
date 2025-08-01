@@ -35,7 +35,7 @@ jobs:
           jf mvnc --repo-resolve-releases=petclinic-libs-release --repo-resolve-snapshots=petclinic-libs-snapshot-local --repo-deploy-releases=petclinic-libs-release-local --repo-deploy-snapshots=petclinic-libs-snapshot-local
       - name: Build and Deploy with Maven
         run: |
-          ./mvnw -B deploy -DskipTests --settings=$(jf mvn-config --show-config)
+          ./mvnw -B deploy -DskipTests --settings=~/.jfrog/settings.xml
       - name: Collect and Publish Build Info
         run: |
           jf rt bce
