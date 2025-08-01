@@ -32,6 +32,9 @@ jobs:
           JF_URL: ${{ vars.JF_URL }}
           JF_USER: ${{ secrets.JF_USER }}
           JF_PASSWORD: ${{ secrets.JF_PASSWORD }}
+      - name: Configure JFrog CLI Connection
+        run: |
+          jf c add my-server --url="$JF_URL" --user="$JF_USER" --password="$JF_PASSWORD" --interactive=false
       - name: JFrog CLI Debug and Ping
         run: |
           export JFROG_CLI_LOG_LEVEL=DEBUG
